@@ -7,8 +7,8 @@
 #include "ofMain.h"
 #include "Explosion.h"
 #include "ofxMediaDB.h"
-#include "ofxNativeGuiAutoLayout.h"
-#include "ofxRemoteUI.h"
+//#include "ofxNativeGuiAutoLayout.h"
+//#include "ofxRemoteUI.h"
 
 class testApp : public ofBaseApp{
 	public:

@@ -28,7 +28,7 @@ void testApp::setup(){
 							0.9					//life in seconds
 						 );
 
-//    GUI.setup("my sample gui", 300, 600);
+//  GUI.setup("my sample gui", 300, 600);
 //
 //	GUI.addSlider("strength", 10, 2900, 1200, &strength);
 //	GUI.addSlider("numP", 5, 50, 15, &numP);
@@ -49,16 +49,16 @@ void testApp::setup(){
 	gravity = 200;
 
 
-	OFX_REMOTEUI_SERVER_SETUP();
-
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(strength, 10, 2900);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(numP, 5, 50);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(friction, 0.8, 1);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(life, 0.2, 1.7);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(offset, 0, 50);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(spawnOffset, 0, 50);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(smokeLife, 0.2, 4);
-	OFX_REMOTEUI_SERVER_SHARE_PARAM(gravity, -1000, 1000);
+//	OFX_REMOTEUI_SERVER_SETUP();
+//
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(strength, 10, 2900);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(numP, 5, 50);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(friction, 0.8, 1);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(life, 0.2, 1.7);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(offset, 0, 50);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(spawnOffset, 0, 50);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(smokeLife, 0.2, 4);
+//	OFX_REMOTEUI_SERVER_SHARE_PARAM(gravity, -1000, 1000);
 }
 
 
@@ -76,7 +76,7 @@ void testApp::update(){
 
 	e.update(1./60.);
 	if( ofGetFrameNum()%10 == 0) ofSetWindowTitle( ofToString(ofGetFrameRate()));
-	OFX_REMOTEUI_SERVER_UPDATE(0.016666f);
+	//OFX_REMOTEUI_SERVER_UPDATE(0.016666f);
 }
 
 //--------------------------------------------------------------
@@ -93,14 +93,6 @@ void testApp::draw(){
 void testApp::mousePressed(int x, int y, int button){
 
 	if (button == 0){
-//		e.explode(	ofVec2f(x,y),
-//					1200,	//explosion strength
-//					15,		//num debris particles
-//					0.93,	//air friction
-//					ofVec2f(0, 200), // gravity vector
-//					1.2,		//particles life duration
-//					30		//initial position randomness, should be exploded object radius +-
-//				  );
 		e.explode(	ofVec2f(x,y),
 				  strength,	//explosion strength
 				  numP,		//num debris particles
