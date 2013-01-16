@@ -78,7 +78,7 @@ public:
 		gravity = gravity_;
 		center = pos;
 		explodinObjectRadius = objectRadius;
-		exploding = 0;
+		exploding = 0.0001;
 		running = true;
 
 		smokeParticles.explode(pos, numParticles, strength, life, friction, spawnOffset, smokeTex, fireGradient, smokeGradient);
@@ -96,15 +96,25 @@ public:
 		mainSmoke.spawnSmoke(center, 0, smokeGradient.getColorAtPercent(exploding), randomSpeed, smokeAcc/*acc*/, smokeLife * 2, 0.93); //friction for the first cloud, so it stays around center
 	}
 
+
+	void reset(){
+		exploding = 0.0f;
+		running = false;
+		smokeParticles.reset(); // the flying objects, start from center, run in all directions, spawn smoke and fire
+		fireParticles.reset();
+		mainSmoke.reset();
+		mainSmokeMesh.clear();
+	}
 	
-	void stopExplosion(){
+
+	void stopPostExplosionSmoke(){
 		running = false;
 	}
 
 
 	void update( float dt ){
 
-		if(exploding < 1.0f) exploding += dt;
+		if(exploding > 0.0f) exploding += dt;
 		exploding = ofClamp(exploding, 0, 1);
 
 		smokeParticles.update(dt, gravity, spawnOffset, smokeSpeed, smokeAcc, smokeLife);
@@ -126,8 +136,6 @@ public:
 
 	void drawMesh(){
 
-		ofEnablePointSprites();
-
 		//draw the fire trails udnerneath it all
 //		glPointSize( PIXEL_SCALE * debrisTex->getWidth() );
 //		debrisTex->bind();
@@ -135,6 +143,7 @@ public:
 //			smokeParticles.drawFireMesh();
 //		debrisTex->unbind();
 
+		ofEnablePointSprites();
 		ofEnableAlphaBlending();
 
 		//the smoke trails
@@ -158,10 +167,8 @@ public:
 			fireParticles.drawFireMesh();
 		debrisTex->unbind();
 
-
 		ofDisablePointSprites();
 		ofEnableAlphaBlending();
-
 	}
 
 	void drawDebug(){
@@ -171,11 +178,13 @@ public:
 		smokeGradient.drawDebug(0,ofGetHeight() -h, w, -h);
 	}
 
-
 	bool isExploding(){
-		return exploding > 0.0f;
+		return exploding > 0.0f && exploding < 1.0f;
 	}
 
+	bool hasFinishedExploding(){
+		return exploding >= 1.0f;
+	}
 
 private:
 

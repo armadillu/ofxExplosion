@@ -16,7 +16,7 @@ class testApp : public ofBaseApp{
 		void update();
 		void draw();
 
-		void keyReleased(int key){};
+		void keyReleased(int key);
 		void mousePressed(int x, int y, int button);
 
 		Explosion e;

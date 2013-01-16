@@ -29,20 +29,16 @@ class ExplosionSmoke{
 	public:
 
 	~ExplosionSmoke(){
-		for(int i = smokeP.size()-1; i >= 0 ; i--){
-			free (smokeP[i]);
-			smokeP.erase(smokeP.begin() + i);
-			i--;
-		}
+		reset();
 	}
 
 
 	void setup(){
-
 		fadingOut = 1.0;
 		//c = 0;
 	}
-	
+
+
 	void update( float dt){
 
 		for(int i = smokeP.size()-1; i >= 0 ; i--){
@@ -58,7 +54,16 @@ class ExplosionSmoke{
 		}
 	}
 
+
 	bool isFinished(){ return smokeP.size() == 0; }
+
+	
+	void reset(){
+		for(int i = smokeP.size()-1; i >= 0 ; i--){
+			free (smokeP[i]);
+			smokeP.erase(smokeP.begin() + i);
+		}
+	}
 	
 
 	void fillMesh( ofMesh & mesh){

@@ -7,6 +7,7 @@ void testApp::setup(){
 	ofSetFrameRate(60);
 	ofBackground(128);
 	ofEnableAlphaBlending();
+	ofSetVerticalSync(true);
 
 	ofDisableArbTex();
 
@@ -93,10 +94,17 @@ void testApp::draw(){
 }
 
 
+void testApp::keyReleased(int key){
+
+	e.stopPostExplosionSmoke();
+}
+
+
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
 
 	if (button == 0){
+		//printf("expolode!\n");
 		e.explode(	ofVec2f(x,y),
 				  strength,	//explosion strength
 				  numP,		//num debris particles
@@ -107,7 +115,7 @@ void testApp::mousePressed(int x, int y, int button){
 				  );
 
 	}else{
-		e.stopExplosion();
+		e.reset();
 	}
 
 }

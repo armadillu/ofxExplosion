@@ -19,6 +19,7 @@ public:
 
 	~ExplosionParticle(){
 		delete smoke;
+		delete fire;
 	};
 
 	ofVec2f p;
@@ -125,6 +126,14 @@ public:
 		headMesh.draw();
 	}
 
+	void reset(){
+		for(int i = smokeParticles.size()-1; i >= 0 ; i--){
+			free (smokeParticles[i]);
+			smokeParticles.erase(smokeParticles.begin() + i);
+		}
+		fillMesh();
+	}
+	
 private:
 
 	void fillMesh(){
