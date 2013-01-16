@@ -28,6 +28,8 @@ void testApp::setup(){
 							0.9					//life in seconds
 						 );
 
+	// to tweak params with ofxNativeGui
+
 //  GUI.setup("my sample gui", 300, 600);
 //
 //	GUI.addSlider("strength", 10, 2900, 1200, &strength);
@@ -48,6 +50,8 @@ void testApp::setup(){
 	smokeLife = 0.9;
 	gravity = 200;
 
+
+	// to tweak params with ofxRemoteUI
 
 //	OFX_REMOTEUI_SERVER_SETUP();
 //
