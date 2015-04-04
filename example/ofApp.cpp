@@ -30,15 +30,15 @@ void ofApp::setup(){
 	ofEnableArbTex();
 
 
-	strength = 1200;
-	numP = 15;
+	strength = 950;
+	numP = 16;
 	friction = 0.93;
-	life = 0.9;
+	life = 0.99;
 	offset = 0;
-	spawnOffset = 5;
-	smokeLife = 0.9;
-	gravity = 200;
-	pixelScale = 1;
+	spawnOffset = 4;
+	smokeLife = 1.6;
+	gravity = 100;
+	pixelScale = 3;
 
 	RUI_SET_CONFIGS_DIR(CONFIGS_DIRECTORY);
 	RUI_SETUP();
