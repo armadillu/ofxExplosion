@@ -9,10 +9,6 @@
 #include "ExplosionParticles.h"
 #include "ofxColorGradient.h"
 
-#ifndef PIXEL_SCALE //define this in your code to override
-#define PIXEL_SCALE 4
-#endif
-
 
 class Explosion{
 	
@@ -25,6 +21,7 @@ public:
 		debrisTex = debrisTex_;
 		running = false;
 		exploding = 0.0f;
+		pixelScale = 4.0;
 
 		//if no gradient supplied, make a default one
 		if (smoke.getNumColors() == 0){
@@ -32,8 +29,8 @@ public:
 			smokeGradient.addColor(ofColor(128, 0));
 			smokeGradient.addColor(ofColor(128, 255));
 			smokeGradient.addColor(ofColor(90, 255));
-			smokeGradient.addColor(ofColor(64, 200));
-			smokeGradient.addColor(ofColor(32, 150));
+			smokeGradient.addColor(ofColor(64, 100));
+			smokeGradient.addColor(ofColor(32, 0));
 		}else{
 			smokeGradient = smoke;
 		}
@@ -60,7 +57,10 @@ public:
 		mainSmokeMesh.setMode(OF_PRIMITIVE_POINTS);
 		fireParticles.setup();
 	}
-	
+
+	void setPixelScale(float s){
+		pixelScale = s;
+	};
 
 	void setSmokeProperties( float spawnRandomOffset_, ofVec2f smokeSpeed_, ofVec2f smokeAcc_, float smokeLife_){
 		spawnOffset = spawnRandomOffset_;
@@ -70,7 +70,9 @@ public:
 	}
 
 
-	void explode(ofVec2f pos, float strength, int numParticles = 10, float friction = 0.93, ofVec2f gravity_ = ofVec2f(0,0), float life = 1.2, float objectRadius = 0 ){
+	void explode(const ofVec2f & pos, const ofVec2f & angleRange, float strength,
+				 int numParticles = 10, float friction = 0.93f, const ofVec2f & gravity_ = ofVec2f(0,0),
+				 float life = 1.2, float objectRadius = 0 ){
 
 		//stopSpeed speed at which we consider stopped moving (this it stops emiting smoke), not taking in account gravity!
 		running = true;
@@ -81,8 +83,8 @@ public:
 		exploding = 0.0001;
 		running = true;
 
-		smokeParticles.explode(pos, numParticles, strength, life, friction, spawnOffset, smokeTex, fireGradient, smokeGradient);
-		fireParticles.explode(pos, numParticles, strength * 0.35, life * 0.5, friction, spawnOffset, smokeTex, fireGradient, fireGradient);
+		smokeParticles.explode(pos, angleRange, numParticles, strength, life, friction, spawnOffset, smokeTex, fireGradient, smokeGradient);
+		fireParticles.explode(pos, angleRange, numParticles, strength * 0.35f, life * 0.5f, friction, spawnOffset, smokeTex, fireGradient, fireGradient);
 
 		for(int i = 0; i < 30; i++){ //at explode time, make a lot fo smoke in middle
 			spawnInitialCenterSmoke();
@@ -91,9 +93,9 @@ public:
 	}
 
 	void spawnInitialCenterSmoke(){
-		float l = explStrength * 0.33;
+		float l = explStrength * 0.33f;
 		ofVec2f randomSpeed = ofVec2f( ofRandom(-l,l), ofRandom(-l,l) );
-		mainSmoke.spawnSmoke(center, 0, smokeGradient.getColorAtPercent(exploding), randomSpeed, smokeAcc/*acc*/, smokeLife * 2, 0.93); //friction for the first cloud, so it stays around center
+		mainSmoke.spawnSmoke(center, 0, smokeGradient.getColorAtPercent(exploding), randomSpeed, smokeAcc/*acc*/, smokeLife * 2.0f, 0.93f); //friction for the first cloud, so it stays around center
 	}
 
 
@@ -115,13 +117,13 @@ public:
 	void update( float dt ){
 
 		if(exploding > 0.0f) exploding += dt;
-		exploding = ofClamp(exploding, 0, 1);
+		exploding = ofClamp(exploding, 0.0f, 1.0f);
 
 		smokeParticles.update(dt, gravity, spawnOffset, smokeSpeed, smokeAcc, smokeLife);
 		fireParticles.update(dt, gravity, spawnOffset, smokeSpeed * 0.5f, smokeAcc * 0.5f, smokeLife * 0.5f);
 
 		if (running){ // the smoke in the center gets spawned here
-			if(exploding < 0.2){
+			if(exploding < 0.2f){
 				spawnInitialCenterSmoke();
 			}
 			float l = smokeSpeed.length() + 1;
@@ -147,7 +149,7 @@ public:
 		ofEnableAlphaBlending();
 
 		//the smoke trails
-		glPointSize( PIXEL_SCALE * smokeTex->getWidth() );
+		glPointSize( pixelScale * smokeTex->getWidth() );
 		smokeTex->bind();
 			mainSmokeMesh.draw();
 			smokeParticles.drawSmokeMesh();
@@ -155,13 +157,13 @@ public:
 
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
 
-		glPointSize( PIXEL_SCALE * explosionTex->getWidth() );
+		glPointSize( pixelScale * explosionTex->getWidth() );
 		explosionTex->bind();
 		fireParticles.drawFireMesh();
 		explosionTex->unbind();
 
 		//finally, the projectiles
-		glPointSize( PIXEL_SCALE * debrisTex->getWidth() );
+		glPointSize( pixelScale * debrisTex->getWidth() );
 		debrisTex->bind();
 			smokeParticles.drawFireMesh();
 			fireParticles.drawFireMesh();
@@ -172,8 +174,8 @@ public:
 	}
 
 	void drawDebug(){
-		float h = 20;
-		float w = 150;
+		float h = 20.0f;
+		float w = 150.0f;
 		fireGradient.drawDebug(0,ofGetHeight(), w, -h);
 		smokeGradient.drawDebug(0,ofGetHeight() -h, w, -h);
 	}
@@ -217,5 +219,6 @@ private:
 	ExplosionSmoke mainSmoke; //this is the smoke that runs in in the explosion center
 	ofMesh mainSmokeMesh;
 
+	float pixelScale;
 };
 
